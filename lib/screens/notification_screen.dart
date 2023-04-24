@@ -6,7 +6,7 @@ class NotificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text('Notification Page'),
+          title: const Text('Notification Page'),
         ),
         backgroundColor: Colors.blue,
         body: Container(
@@ -23,7 +23,7 @@ class NotificationScreen extends StatelessWidget {
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [Text('Second Screen')],
+                children: const [Text('Second Screen')],
               ),
             ),
           ),

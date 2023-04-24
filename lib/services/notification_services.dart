@@ -1,9 +1,11 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:awesome_notifications_package_flutter/screens/notification_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
+
+import '/screens/notification_screen.dart';
+
 class NotificationService {
-  static Future<void> initializeNotification(BuildContext context) async {
+  static Future<void> initializeNotification() async {
     await AwesomeNotifications().initialize(
       // set the icon to null if you want to use the default app icon
       // 'resource://drawable/res_app_icon',
@@ -38,11 +40,14 @@ class NotificationService {
     await AwesomeNotifications().isNotificationAllowed().then(
       (isAllowed) async {
         if (!isAllowed) {
+          debugPrint('!isAllowed');
           await AwesomeNotifications().requestPermissionToSendNotifications();
         }
       },
     );
+  }
 
+  static Future<void> setListeners(BuildContext context) async {
     await AwesomeNotifications().setListeners(
       onNotificationCreatedMethod: (_) async =>
           debugPrint('onNotificationCreatedMethod'),
