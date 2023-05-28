@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         title: 'Awesome Notifications Package Flutter',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.lightBlue,
+          primarySwatch: Colors.purple,
         ),
         home: const HomeScreen(title: 'Awesome Notifications Package Flutter'),
       );

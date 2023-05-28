@@ -24,6 +24,7 @@ class NotificationButton extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               shadowColor: Theme.of(context).shadowColor,
               backgroundColor: Theme.of(context).primaryColor,
+              textStyle: const TextStyle(color: Colors.white),
             ),
             child: Text(text),
           ),

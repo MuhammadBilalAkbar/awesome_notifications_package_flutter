@@ -13,7 +13,7 @@ class NotificationService {
       [
         NotificationChannel(
           channelGroupKey: 'basic_channel_group',
-          channelKey: 'basic_channel',
+          channelKey: 'basic_channel_group',
           channelName: 'Basic notifications',
           channelDescription: 'Notification channel for basic tests',
           defaultColor: const Color(0xFF9D50DD),
@@ -34,7 +34,6 @@ class NotificationService {
           channelGroupName: 'Basic group',
         ),
       ],
-      debug: true,
     );
 
     await AwesomeNotifications().isNotificationAllowed().then(
