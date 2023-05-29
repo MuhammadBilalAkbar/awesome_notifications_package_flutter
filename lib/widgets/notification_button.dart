@@ -16,18 +16,16 @@ class NotificationButton extends StatelessWidget {
           horizontal: 30,
           vertical: 15,
         ),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: 50,
-          child: ElevatedButton(
-            onPressed: onPressed,
-            style: ElevatedButton.styleFrom(
-              shadowColor: Theme.of(context).shadowColor,
-              backgroundColor: Theme.of(context).primaryColor,
-              textStyle: const TextStyle(color: Colors.white),
+        child: ElevatedButton(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(500, 60),
+            textStyle: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
             ),
-            child: Text(text),
           ),
+          child: Text(text),
         ),
       );
 }

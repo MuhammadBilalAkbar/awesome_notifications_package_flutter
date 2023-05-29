@@ -105,7 +105,7 @@ samples, guidance on mobile development, and a full API reference.
 
 **Problems from Videos**
 
-- Question: how to send that push notification from my php server to a specific user only?
+- Question: How to send that push notification from my php server to a specific user only?
 
 Answer: There is firebase message plugin for php, use that to send notification, and you need device
 fcm token to send notification to specific device.
@@ -153,7 +153,7 @@ Answer: Set `notificationLayout: NotificationLayout.ProgressBar,` of showNotific
 
 1. Run `dart pub add awesome_notifications` to add awesome_notifications package in your project's
    pubspec.yaml file.
-2. _[What are the main points of this video lesson]_
+2. Main points:
     - _[Add here multiple main points ...]_
     - _[...]_
 3. _[Out of 1. & 2. create 2-3 sentences that could be later used for recording the introduction of this video lesson]_

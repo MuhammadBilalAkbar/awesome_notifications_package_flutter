@@ -12,13 +12,17 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  static const title = 'Awesome Notifications Package';
+
   @override
   Widget build(BuildContext context) => MaterialApp(
-        title: 'Awesome Notifications Package Flutter',
+        title: title,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.purple,
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
         ),
-        home: const HomeScreen(title: 'Awesome Notifications Package Flutter'),
+        home: const HomeScreen(title: title),
       );
 }

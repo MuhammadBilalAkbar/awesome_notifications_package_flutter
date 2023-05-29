@@ -25,7 +25,7 @@ class NotificationService {
           criticalAlerts: true,
           locked: true,
           enableLights: true,
-        )
+        ),
       ],
       // Channel groups are only visual and are not required
       channelGroups: [
@@ -39,7 +39,7 @@ class NotificationService {
     await AwesomeNotifications().isNotificationAllowed().then(
       (isAllowed) async {
         if (!isAllowed) {
-          debugPrint('!isAllowed');
+          debugPrint('isAllowed: $isAllowed');
           await AwesomeNotifications().requestPermissionToSendNotifications();
         }
       },
