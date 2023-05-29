@@ -14,7 +14,7 @@ class NotificationService {
       [
         NotificationChannel(
           channelGroupKey: 'basic_channel_group',
-          channelKey: 'basic_channel_group',
+          channelKey: 'basic_channel',
           channelName: 'Basic notifications',
           channelDescription: 'Notification channel for basic tests',
           defaultColor: const Color(0xFF9D50DD),
