@@ -15,11 +15,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    super.initState();
-    NotificationService.setListeners(context);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   NotificationService.setListeners(context);
+  // }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -93,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   payload: {'navigate': 'true'},
                   actionButtons: [
                     NotificationActionButton(
-                      key: 'navigate',
+                      key: 'check',
                       label: 'Check it out',
                       actionType: ActionType.SilentAction,
                       color: Colors.green,

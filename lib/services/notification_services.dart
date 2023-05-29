@@ -1,3 +1,4 @@
+import 'package:awesome_notifications_package_flutter/main.dart';
 import 'package:flutter/material.dart';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -23,8 +24,8 @@ class NotificationService {
           onlyAlertOnce: true,
           playSound: true,
           criticalAlerts: true,
-          locked: true,
-          enableLights: true,
+          // locked: true,
+          // enableLights: true,
         ),
       ],
       // Channel groups are only visual and are not required
@@ -34,6 +35,7 @@ class NotificationService {
           channelGroupName: 'Basic group',
         ),
       ],
+      debug: true,
     );
 
     await AwesomeNotifications().isNotificationAllowed().then(
@@ -44,9 +46,7 @@ class NotificationService {
         }
       },
     );
-  }
 
-  static Future<void> setListeners(BuildContext context) async {
     await AwesomeNotifications().setListeners(
       onNotificationCreatedMethod: (_) async =>
           debugPrint('onNotificationCreatedMethod'),
@@ -58,9 +58,14 @@ class NotificationService {
         debugPrint('onActionReceivedMethod');
         final payload = receivedAction.payload ?? {};
         if (payload['navigate'] == 'true') {
-          Navigator.of(context).push(
+          // Navigator.of(context).push(
+          //   MaterialPageRoute(
+          //     builder: (_) => const NotificationScreen(),
+          //   ),
+          // );
+          MyApp.navigatorKey.currentState?.push(
             MaterialPageRoute(
-              builder: (context) => const NotificationScreen(),
+              builder: (_) => const NotificationScreen(),
             ),
           );
         }
@@ -68,17 +73,19 @@ class NotificationService {
     );
   }
 
+  // static Future<void> setListeners(BuildContext context) async {}
+
   static Future<void> showNotification({
     required final String title,
     required final String body,
-    final actionType = ActionType.Default,
-    final notificationLayout = NotificationLayout.Default,
-    final bool scheduled = false,
     final String? summary,
     final Map<String, String>? payload,
+    final actionType = ActionType.Default,
+    final notificationLayout = NotificationLayout.Default,
     final NotificationCategory? category,
     final String? bigPicture,
     final List<NotificationActionButton>? actionButtons,
+    final bool scheduled = false,
     final int? interval,
   }) async {
     assert(!scheduled || (scheduled && interval != null));

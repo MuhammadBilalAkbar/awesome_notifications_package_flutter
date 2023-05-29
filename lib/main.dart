@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
 import 'services/notification_services.dart';
 
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  NotificationService.initializeNotification();
+  await NotificationService.initializeNotification();
   runApp(const MyApp());
 }
 
@@ -13,9 +13,11 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   static const title = 'Awesome Notifications Package';
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) => MaterialApp(
+        navigatorKey: navigatorKey,
         title: title,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(

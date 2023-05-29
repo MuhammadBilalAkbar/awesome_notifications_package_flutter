@@ -154,12 +154,18 @@ Answer: Set `notificationLayout: NotificationLayout.ProgressBar,` of showNotific
 1. Run `dart pub  add awesome_notifications` to add awesome_notifications package in your project's
    pubspec.yaml file.
 2. Main points:
-    - _[Add here multiple main points ...]_
-    - _[...]_
-3. _[Out of 1. & 2. create 2-3 sentences that could be later used for recording the introduction of this video lesson]_
+    - Normal and Simple Notification
+    - Notification with Summary
+    - Progress Bar Notification
+    - Message Notification
+    - Big Image Notification
+    - Action Button Notification
+    - Scheduled Notification
+3. 
 
 **The Structured Main Content**
 
 1. _[Add here the main topics the video project is covering in chronological order. For each topic add the main points how this lesson can be taught step by step to beginners who never did anything related to what this lesson is about]_
 2. Output of this project is following:
    ![](Awesome-Notifications-Output.gif)
+3. https://pub.dev/packages/awesome_notifications#-schedule-precision
