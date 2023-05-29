@@ -151,7 +151,7 @@ Answer: Set `notificationLayout: NotificationLayout.ProgressBar,` of showNotific
 
 **Main Points / Purpose Of Lesson**
 
-1. Run `dart pub  add awesome_notifications` to add awesome_notifications package in your project's
+1. Run `dart pub add awesome_notifications` to add awesome_notifications package in your project's
    pubspec.yaml file.
 2. Main points:
     - _[Add here multiple main points ...]_
