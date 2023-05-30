@@ -1,43 +1,26 @@
-import 'package:awesome_notifications_package_flutter/main.dart';
 import 'package:flutter/material.dart';
+import '/main.dart';
 
-class NotificationScreen extends StatelessWidget {
-  const NotificationScreen({Key? key}) : super(key: key);
+class SecondScreen extends StatelessWidget {
+  const SecondScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Notification Page'),
-      ),
-      backgroundColor: Colors.blue,
-      body: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Theme.of(context).primaryColor,
-                Colors.grey[200]!,
-              ],
-            )),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.height,
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Notification Page'),
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        ),
+        body: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Spacer(),
-              const Center(
-                child: Text("Navigated from notification"),
-              ),
-              // This icon button has been added fot ios navigation
+              const Text('Navigated from notification'),
               IconButton(
                 onPressed: () => MyApp.navigatorKey.currentState?.pop(),
-                icon: const Icon(Icons.arrow_circle_left_outlined),
+                icon: const Icon(Icons.arrow_circle_left_outlined, size: 30),
               ),
-              const Spacer(),
             ],
           ),
         ),
-      ),
-    );
-  }
+      );
 }

@@ -19,7 +19,7 @@ class NotificationButton extends StatelessWidget {
         child: ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
-            minimumSize: const Size(500, 60),
+            minimumSize: const Size(400, 60),
             textStyle: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,

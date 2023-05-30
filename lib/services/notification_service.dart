@@ -1,20 +1,17 @@
-import 'package:awesome_notifications_package_flutter/main.dart';
-import 'package:flutter/material.dart';
-
-import 'package:awesome_notifications/awesome_notifications.dart';
-
+import '/main.dart';
 import '/screens/notification_screen.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/material.dart';
 
 class NotificationService {
   static Future<void> initializeNotification() async {
     await AwesomeNotifications().initialize(
       // set the icon to null if you want to use the default app icon
-      // 'resource://drawable/res_app_icon',
       null,
       [
         NotificationChannel(
-          channelGroupKey: 'basic_channel_group',
-          channelKey: 'basic_channel',
+          channelGroupKey: 'basic_notification_channel',
+          channelKey: 'basic_notification_channel',
           channelName: 'Basic notifications',
           channelDescription: 'Notification channel for basic tests',
           defaultColor: const Color(0xFF9D50DD),
@@ -24,16 +21,13 @@ class NotificationService {
           onlyAlertOnce: true,
           playSound: true,
           criticalAlerts: true,
-          // locked: true,
-          // enableLights: true,
-        ),
+        )
       ],
-      // Channel groups are only visual and are not required
       channelGroups: [
         NotificationChannelGroup(
-          channelGroupKey: 'basic_channel_group',
-          channelGroupName: 'Basic group',
-        ),
+          channelGroupKey: 'basic_notification_channel_group',
+          channelGroupName: 'Group 1',
+        )
       ],
       debug: true,
     );
@@ -41,39 +35,44 @@ class NotificationService {
     await AwesomeNotifications().isNotificationAllowed().then(
       (isAllowed) async {
         if (!isAllowed) {
-          debugPrint('isAllowed: $isAllowed');
           await AwesomeNotifications().requestPermissionToSendNotifications();
         }
       },
     );
 
     await AwesomeNotifications().setListeners(
-      onNotificationCreatedMethod: (_) async =>
-          debugPrint('onNotificationCreatedMethod'),
-      onNotificationDisplayedMethod: (_) async =>
-          debugPrint('onNotificationDisplayedMethod'),
-      onDismissActionReceivedMethod: (_) async =>
-          debugPrint('onDismissActionReceivedMethod'),
-      onActionReceivedMethod: (receivedAction) async {
-        debugPrint('onActionReceivedMethod');
-        final payload = receivedAction.payload ?? {};
-        if (payload['navigate'] == 'true') {
-          // Navigator.of(context).push(
-          //   MaterialPageRoute(
-          //     builder: (_) => const NotificationScreen(),
-          //   ),
-          // );
-          MyApp.navigatorKey.currentState?.push(
-            MaterialPageRoute(
-              builder: (_) => const NotificationScreen(),
-            ),
-          );
-        }
-      },
+      onActionReceivedMethod: onActionReceivedMethod,
+      onNotificationCreatedMethod: onNotificationCreatedMethod,
+      onNotificationDisplayedMethod: onNotificationDisplayedMethod,
+      onDismissActionReceivedMethod: onDismissActionReceivedMethod,
     );
   }
 
-  // static Future<void> setListeners(BuildContext context) async {}
+  /// Use this method to detect when a new notification or a schedule is created
+  static Future<void> onNotificationCreatedMethod(_) async =>
+      debugPrint('onNotificationCreatedMethod');
+
+  /// Use this method to detect every time that a new notification is displayed
+  static Future<void> onNotificationDisplayedMethod(_) async =>
+      debugPrint('onNotificationDisplayedMethod');
+
+  /// Use this method to detect if the user dismissed a notification
+  static Future<void> onDismissActionReceivedMethod(_) async =>
+      debugPrint('onDismissActionReceivedMethod');
+
+  /// Use this method to detect when the user taps on a notification or action button
+  static Future<void> onActionReceivedMethod(
+      ReceivedAction receivedAction) async {
+    debugPrint('onActionReceivedMethod');
+    final payload = receivedAction.payload ?? {};
+    if (payload['navigate'] == 'true') {
+      MyApp.navigatorKey.currentState?.push(
+        MaterialPageRoute(
+          builder: (_) => const SecondScreen(),
+        ),
+      );
+    }
+  }
 
   static Future<void> showNotification({
     required final String title,
@@ -93,7 +92,7 @@ class NotificationService {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: -1,
-        channelKey: 'basic_channel',
+        channelKey: 'basic_notification_channel',
         title: title,
         body: body,
         actionType: actionType,
