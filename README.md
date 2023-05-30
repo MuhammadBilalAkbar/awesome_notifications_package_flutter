@@ -170,11 +170,19 @@ Answer: Set `notificationLayout: NotificationLayout.ProgressBar,` of showNotific
    pubspec.yaml file.
 2. Output of this project is following:
    ![](Awesome-Notifications-Output.gif)
-3. Read [this](https://pub.dev/packages/awesome_notifications#-schedule-precision)
+3. Configure Android
+   like [here](https://pub.dev/packages/awesome_notifications#-configuring-android), set
+   compileSdkVersion and targetSdkVersion to 33 and minSdkVersion to 21 android/app/build.gradle and
+   make sure android:exported="true" is added in androimanifest.
+
+   Configure iOS by visiting [here](https://pub.dev/packages/awesome_notifications#-configuring-ios)
+   .
+
+   Read [this](https://pub.dev/packages/awesome_notifications#-schedule-precision)
    and [this](https://pub.dev/packages/awesome_notifications#-important-notes).
 
-   So, add following in android >app >src >main > AndroidManifest.xml to show scheduled
-   notifications or critical notifications.
+So, add following in android >app >src >main > AndroidManifest.xml to show scheduled
+notifications or critical notifications.
 
     ```xml 
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
