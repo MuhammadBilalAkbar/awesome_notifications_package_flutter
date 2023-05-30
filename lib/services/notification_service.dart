@@ -1,12 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import '/main.dart';
 import '/screens/notification_screen.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:flutter/material.dart';
 
 class NotificationService {
   static Future<void> initializeNotification() async {
     await AwesomeNotifications().initialize(
-      // set the icon to null if you want to use the default app icon
       null,
       [
         NotificationChannel(
@@ -29,7 +28,6 @@ class NotificationService {
           channelGroupName: 'Group 1',
         )
       ],
-      debug: true,
     );
 
     await AwesomeNotifications().isNotificationAllowed().then(
@@ -95,9 +93,9 @@ class NotificationService {
         channelKey: 'basic_notification_channel',
         title: title,
         body: body,
+        summary: summary,
         actionType: actionType,
         notificationLayout: notificationLayout,
-        summary: summary,
         category: category,
         payload: payload,
         bigPicture: bigPicture,

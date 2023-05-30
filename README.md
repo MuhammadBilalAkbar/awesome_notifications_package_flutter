@@ -161,11 +161,304 @@ Answer: Set `notificationLayout: NotificationLayout.ProgressBar,` of showNotific
     - Big Image Notification
     - Action Button Notification
     - Scheduled Notification
-3. 
+3. You can also enable critical alerts or precise alarm/schedule by giving some permissions in
+   AndroidManifest.xml file.
 
 **The Structured Main Content**
 
-1. _[Add here the main topics the video project is covering in chronological order. For each topic add the main points how this lesson can be taught step by step to beginners who never did anything related to what this lesson is about]_
+1. Run `dart pub add awesome_notifications` to add awesome_notifications package in your project's
+   pubspec.yaml file.
 2. Output of this project is following:
    ![](Awesome-Notifications-Output.gif)
-3. https://pub.dev/packages/awesome_notifications#-schedule-precision
+3. Read [this](https://pub.dev/packages/awesome_notifications#-schedule-precision)
+   and [this](https://pub.dev/packages/awesome_notifications#-important-notes).
+
+   So, add following in android >app >src >main > AndroidManifest.xml to show scheduled
+   notifications or critical notifications.
+
+    ```xml 
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    ```
+
+4. First of all, you have to initialize notifications service
+   using `await AwesomeNotifications().initialize()` in `notification_service.dart` and call this
+   initialization in runApp of `main.dart` file.
+5. `notification_service.dart` contains `NotificationService` class and this class contains
+   `initializeNotification()` and `showNotification()` methods.
+    - First, it initialize notifications using `await AwesomeNotifications().initialize()`.
+
+      Initializes the plugin, creating a default icon and the initial channels. Only needs to be
+      called at `main.dart`.
+
+      Initialize has following properties:
+        - `defaultIcon`, set the icon to null if you want to use the default app icon
+        - `channels`, it is list of `NotificationChannel()`.
+          It has following properties:
+          ![](notification_channel_properties.png)
+
+          channelKey, channelName, and channelDescription are required properties.
+
+          Set `importance: NotificationImportance.Max,` to show notifications as popup.
+        - `channelGroups`, it is list of `NotificationChannelGroup()`. It has two properties.
+
+          channelGroupKey, and channelGroupName both are required parameters.
+    - Now request to send notifications:
+
+```dart     
+      await AwesomeNotifications().isNotificationAllowed().then(
+      (isAllowed) async {
+        if (!isAllowed) {
+          await AwesomeNotifications().requestPermissionToSendNotifications();
+        }
+      },
+   );
+```
+
+- Set listeners to track notifications using `awesomeNotification().setListeners()`
+    - onActionReceivedMethod method that receives all the notification actions
+    - onNotificationCreatedMethod method that gets called when a new notification or schedule is
+      created on the system
+    - onNotificationDisplayedMethod method that gets called when a new notification is displayed
+      on status bar
+    - onDismissActionReceivedMethod method that receives the notification dismiss actions
+    - All other methods print their relevant actions in console.
+    - onActionReceivedMethod method is used to go to another page when notification shows and user
+      clicks on button. User `navigatorKey` defined in MyApp to go other pages by clicking on
+      notification buttons.
+
+```dart 
+  static Future<void> onActionReceivedMethod(
+      ReceivedAction receivedAction) async {
+    debugPrint('onActionReceivedMethod');
+    final payload = receivedAction.payload ?? {};
+    if (payload['navigate'] == 'true') {
+      MyApp.navigatorKey.currentState?.push(
+        MaterialPageRoute(
+          builder: (_) => const SecondScreen(),
+        ),
+      );
+    }
+  }
+```
+
+- `showNotification()` method uses `await AwesomeNotifications().createNotification()` to create a
+  notification. createNotification has following properties:
+    - `content` is required property and accepts `NotificationContent`.
+
+      Properties of `NotificationContent` are following:
+      ![](notification_content_properties.png)
+
+      id and channelKey are required parameters. I have set id to -1. It means, we have no concern
+      with it. It can be of any number. Notification layout may be of:
+      ![](notification_layout.png)
+    - `schedule` accepts `NotificationInterval`. interval is required parameter of
+      NotificationInterval.
+
+      If you want to schedule notification,
+      use `assert(!scheduled || (scheduled && interval != null));`
+      in start of showNotification() method. Also use `SCHEDULE_EXACT_ALARM` in androidmanifest
+      file.
+
+    - actionButtons accepts list of NotificationActionButton to go to any other screen of the app by
+      clicking on notification button.
+
+- Call `initializeNotification()` in `main.dart` and call `showNotification()` method in HomeScreen
+  to show notifications in HomeScreen.
+
+  Complete code of NotificationClass is following:
+
+```dart
+class NotificationService {
+  static Future<void> initializeNotification() async {
+    await AwesomeNotifications().initialize(
+      // set the icon to null if you want to use the default app icon
+      null,
+      [
+        NotificationChannel(
+          channelGroupKey: 'basic_notification_channel',
+          channelKey: 'basic_notification_channel',
+          channelName: 'Basic notifications',
+          channelDescription: 'Notification channel for basic tests',
+          defaultColor: const Color(0xFF9D50DD),
+          ledColor: Colors.white,
+          importance: NotificationImportance.Max,
+          channelShowBadge: true,
+          onlyAlertOnce: true,
+          playSound: true,
+          criticalAlerts: true,
+        )
+      ],
+      channelGroups: [
+        NotificationChannelGroup(
+          channelGroupKey: 'basic_notification_channel_group',
+          channelGroupName: 'Group 1',
+        )
+      ],
+      debug: true,
+    );
+
+    await AwesomeNotifications().isNotificationAllowed().then(
+          (isAllowed) async {
+        if (!isAllowed) {
+          await AwesomeNotifications().requestPermissionToSendNotifications();
+        }
+      },
+    );
+
+    await AwesomeNotifications().setListeners(
+      onActionReceivedMethod: onActionReceivedMethod,
+      onNotificationCreatedMethod: onNotificationCreatedMethod,
+      onNotificationDisplayedMethod: onNotificationDisplayedMethod,
+      onDismissActionReceivedMethod: onDismissActionReceivedMethod,
+    );
+  }
+
+  /// Use this method to detect when a new notification or a schedule is created
+  static Future<void> onNotificationCreatedMethod(_) async =>
+      debugPrint('onNotificationCreatedMethod');
+
+  /// Use this method to detect every time that a new notification is displayed
+  static Future<void> onNotificationDisplayedMethod(_) async =>
+      debugPrint('onNotificationDisplayedMethod');
+
+  /// Use this method to detect if the user dismissed a notification
+  static Future<void> onDismissActionReceivedMethod(_) async =>
+      debugPrint('onDismissActionReceivedMethod');
+
+  /// Use this method to detect when the user taps on a notification or action button
+  static Future<void> onActionReceivedMethod(ReceivedAction receivedAction) async {
+    debugPrint('onActionReceivedMethod');
+    final payload = receivedAction.payload ?? {};
+    if (payload['navigate'] == 'true') {
+      MyApp.navigatorKey.currentState?.push(
+        MaterialPageRoute(
+          builder: (_) => const SecondScreen(),
+        ),
+      );
+    }
+  }
+
+  static Future<void> showNotification({
+    required final String title,
+    required final String body,
+    final String? summary,
+    final Map<String, String>? payload,
+    final actionType = ActionType.Default,
+    final notificationLayout = NotificationLayout.Default,
+    final NotificationCategory? category,
+    final String? bigPicture,
+    final List<NotificationActionButton>? actionButtons,
+    final bool scheduled = false,
+    final int? interval,
+  }) async {
+    assert(!scheduled || (scheduled && interval != null));
+
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: -1,
+        channelKey: 'basic_notification_channel',
+        title: title,
+        body: body,
+        actionType: actionType,
+        notificationLayout: notificationLayout,
+        summary: summary,
+        category: category,
+        payload: payload,
+        bigPicture: bigPicture,
+      ),
+      actionButtons: actionButtons,
+      schedule: scheduled
+          ? NotificationInterval(
+        interval: interval,
+        timeZone:
+        await AwesomeNotifications().getLocalTimeZoneIdentifier(),
+        preciseAlarm: true,
+      )
+          : null,
+    );
+  }
+}
+```
+
+6. `home_screen.dart` file contains HomeScreen of project. It contains seven custom
+   NotificationButton from widgets folder in column.
+
+- Simple notification button:
+
+```dart        
+       NotificationButton(
+              text: 'Normal Notification',
+              onPressed: () async => await NotificationService.showNotification(
+                title: 'Title of the notification',
+                body: 'Body of the notification',
+              ),
+            ),
+```
+
+- Notification with summary button:
+
+```dart 
+            NotificationButton(
+              text: 'Notification With Summary',
+              onPressed: () async => await NotificationService.showNotification(
+                title: 'Title of the notification',
+                body: 'Body of the notification',
+                summary: 'Small Summary',
+                notificationLayout: NotificationLayout.Inbox,
+              ),
+            ),
+```
+
+- Big Image Notification button:
+
+```dart 
+            NotificationButton(
+              text: 'Big Image Notification',
+              onPressed: () async => await NotificationService.showNotification(
+                title: 'Title of the notification',
+                body: 'Body of the notification',
+                summary: 'Small Summary',
+                notificationLayout: NotificationLayout.BigPicture,
+                bigPicture:
+                    'https://files.tecnoblog.net/wp-content/uploads/2019/09/emoji.jpg',
+              ),
+            ),
+```
+
+- Action Button Notification:
+
+By clicking on `Check it out` button, it will check payload and then go to NotificationScreen.
+
+```dart 
+            NotificationButton(
+              text: 'Action Buttons Notification',
+              onPressed: () async => await NotificationService.showNotification(
+                title: 'Title of the notification',
+                body: 'Body of the notification',
+                payload: {'navigate': 'true'},
+                actionButtons: [
+                  NotificationActionButton(
+                    key: 'check',
+                    label: 'Check it out',
+                    actionType: ActionType.SilentAction,
+                    color: Colors.green,
+                  ),
+                ],
+              ),
+            ),
+```
+
+- Scheduled Notification Button:
+
+```dart 
+            NotificationButton(
+              text: 'Scheduled Notification',
+              onPressed: () async => await NotificationService.showNotification(
+                title: 'Scheduled Notification',
+                body: 'Notification was fired after 5 seconds',
+                scheduled: true,
+                interval: 5,
+              ),
+            ),
+```
